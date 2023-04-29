@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -11,12 +10,8 @@ import 'package:geolocator/geolocator.dart';
 
 import 'dart:async';
 import 'dart:io' show File, Platform;
- 
+
 class Utils {
-
- 
-
-
   static Map<String, dynamic> readAndroidBuildData(AndroidDeviceInfo build) {
     return <String, dynamic>{
       'version.securityPatch': build.version.securityPatch,
@@ -44,7 +39,7 @@ class Utils {
       'tags': build.tags,
       'type': build.type,
       'isPhysicalDevice': build.isPhysicalDevice,
-      'androidId': build.androidId,
+      //  'androidId': build.androidId,
       'systemFeatures': build.systemFeatures,
     };
   }
@@ -65,9 +60,6 @@ class Utils {
       'utsname.machine:': data.utsname.machine,
     };
   }
-
-
-
 
   // static Future<LatLng> getUserLocation(BuildContext context) async {
   //   try {
@@ -109,9 +101,7 @@ class Utils {
   //   }
   // }
 
-
-
-    /// Determine the current position of the device.
+  /// Determine the current position of the device.
   ///
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
@@ -152,28 +142,14 @@ class Utils {
     return await Geolocator.getCurrentPosition();
   }
 
- 
+  static String encodeImage(File? image) {
+    final bytes = image!.readAsBytesSync();
+    String encodedImage = "data:image/png;base64," + base64Encode(bytes);
 
-  static  String encodeImage(File? image) {
- final bytes = image!.readAsBytesSync();
-          String encodedImage = "data:image/png;base64," + base64Encode(bytes);
-
-
-          return encodedImage;
+    return encodedImage;
   }
 
-
- static   Image decodeString(String base64String) {
-
+  static Image decodeString(String base64String) {
     return Image.memory(base64Decode(base64String));
-
   }
-
-
-    
-
-
-  
-
-
 }

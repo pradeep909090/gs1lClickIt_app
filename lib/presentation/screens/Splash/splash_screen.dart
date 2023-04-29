@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'package:click_it_app/presentation/screens/home/home_screen.dart';
+
 import 'package:click_it_app/presentation/screens/login/login_screen.dart';
 import 'package:click_it_app/presentation/widgets/bottom_logo_widget.dart';
 import 'package:click_it_app/presentation/widgets/logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
-
 
 String? finalUserName;
 
@@ -16,7 +14,6 @@ class SplashScreen extends StatefulWidget {
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
-
 }
 
 class _SplashScreenState extends State<SplashScreen> {
@@ -31,17 +28,18 @@ class _SplashScreenState extends State<SplashScreen> {
     // otherwise send the user to Login screen
     //firebse analytics setup
 
-    getValidationData().whenComplete(() => Timer(
-          const Duration(seconds: 3),
-          () => Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (BuildContext context) => finalUserName == null
-                  ? const LoginScreen()
-                  : const HomeScreen(),
-            ),
+    getValidationData().whenComplete(
+      () => Timer(
+        const Duration(seconds: 3),
+        () => Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) => finalUserName == null
+                ? const LoginScreen()
+                : const HomeScreen(),
           ),
-        ),);
- 
+        ),
+      ),
+    );
   }
 
   Future getValidationData() async {

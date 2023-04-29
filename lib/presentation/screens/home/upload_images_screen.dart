@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:http/http.dart' as http;
 
 class UploadImagesScreen extends StatefulWidget {
   final String gtin;
@@ -75,6 +76,24 @@ class _UploadImagesScreenState extends State<UploadImagesScreen> {
       final imageTemporary = File(imagePicked.path);
 
       _cropImage(imageTemporary, imageType);
+      // ** api call resoltion
+
+      var imageQualityUrl = "http://20.204.169.52:8080/get-score/front";
+      var imageData = {"front": frontImage};
+      var bodydata = jsonEncode(imageData);
+      var urlParse = Uri.parse(imageQualityUrl);
+      Response response = await http.post(
+        urlParse,
+        body: bodydata,
+      );
+      var datares = response.body;
+
+      print(datares);
+      if (response == 201) {
+        print("Success checked Quality");
+      } else {
+        print("Bad Image");
+      }
     } on PlatformException catch (e) {
       //exception could occur if the user has not permitted for the picker
 
@@ -217,7 +236,7 @@ class _UploadImagesScreenState extends State<UploadImagesScreen> {
       'tags': build.tags,
       'type': build.type,
       'isPhysicalDevice': build.isPhysicalDevice,
-      'androidId': build.androidId,
+      //'androidId': build.androidId,
       'systemFeatures': build.systemFeatures,
     };
   }

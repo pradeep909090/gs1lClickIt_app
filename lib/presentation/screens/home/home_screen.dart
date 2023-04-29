@@ -1,6 +1,8 @@
 import 'package:click_it_app/common/Utils.dart';
+import 'package:click_it_app/presentation/screens/home/new_uploadscreen.dart';
 import 'package:click_it_app/presentation/screens/home/sync_server_screen.dart';
 import 'package:click_it_app/presentation/screens/home/upload_images_screen.dart';
+
 import 'package:click_it_app/presentation/screens/login/login_screen.dart';
 import 'package:click_it_app/presentation/screens/sidepanel/about_us_screen.dart';
 import 'package:click_it_app/presentation/screens/sidepanel/contact_screen.dart';
@@ -15,8 +17,6 @@ import 'package:page_transition/page_transition.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
- 
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -28,10 +28,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
-    String? companyName,companyId;
-
-    
+  String? companyName, companyId;
 
   @override
   void initState() {
@@ -39,15 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     getCompanyDetails();
-
-
- 
-  
-
-
   }
 
- 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -69,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Text(
                         '$companyName ($companyId)',
-                        style:const  TextStyle(
+                        style: const TextStyle(
                           fontSize: 14,
                           color: Colors.deepOrange,
                         ),
@@ -98,13 +88,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     (value) {
                       if (value != null) {
                         Navigator.push(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              child: UploadImagesScreen(
-                                gtin: value,
-                              ),
-                            ),);
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: UploadImagesScreen(gtin: value),
+                          ),
+                        );
                       }
 
                       // value == -1
@@ -169,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   // onTap: () {
-              
+
                   //   // Utils.showDialog(context, SimpleFontelicoProgressDialogType.normal, 'Normal');
                   //   _dialog.show(type: SimpleFontelicoProgressDialogType.spinner, message: '');
                   // },
@@ -214,21 +203,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-   getCompanyDetails()async {
-
-    final SharedPreferences _sharedPreferences= await SharedPreferences.getInstance();
-    String? company_name=_sharedPreferences.getString('company_name');
-    String? company_id=_sharedPreferences.getString('company_id');
+  getCompanyDetails() async {
+    final SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
+    String? company_name = _sharedPreferences.getString('company_name');
+    String? company_id = _sharedPreferences.getString('company_id');
 
     setState(() {
-      companyName=company_name;
-      companyId=company_id;
+      companyName = company_name;
+      companyId = company_id;
       print(companyName);
-      
     });
- 
   }
-
 }
 
 class AppDrawer extends StatefulWidget {
@@ -267,8 +253,6 @@ class _AppDrawerState extends State<AppDrawer> {
             const Divider(),
             Flexible(
               child: ListView(
-                
-            
                 children: [
                   ListTile(
                     onTap: () => Navigator.push(
@@ -309,7 +293,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     onTap: () async {
                       final SharedPreferences _sharedPreferences =
                           await SharedPreferences.getInstance();
-            
+
                       _sharedPreferences.clear().whenComplete(
                             () => Navigator.pushReplacement(
                               context,
@@ -318,7 +302,6 @@ class _AppDrawerState extends State<AppDrawer> {
                                 type: PageTransitionType.leftToRight,
                               ),
                             ),
-
                           );
                     },
                     title: const Text('Logout'),
@@ -326,21 +309,31 @@ class _AppDrawerState extends State<AppDrawer> {
                 ],
               ),
             ),
-            
-            SizedBox(height: 10,),
-
-
-            Stack(children: [
-                 Positioned(
-                   bottom: 10,
-                   left: 20,
-                   child: Text('Version 1.0.0',style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.normal,color: Colors.deepOrange,),),),
-                Image(
-              image: AssetImage(
-                'assets/images/img_sidepanel.png',
-              ),
+            SizedBox(
+              height: 10,
             ),
-            ],),           
+            Stack(
+              children: [
+                Positioned(
+                  bottom: 10,
+                  left: 20,
+                  child: Text(
+                    'Version 1.0.0',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.deepOrange,
+                    ),
+                  ),
+                ),
+                Image(
+                  image: AssetImage(
+                    'assets/images/img_sidepanel.png',
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
         // decoration: BoxDecoration(
