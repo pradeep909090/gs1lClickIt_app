@@ -18,7 +18,6 @@ import 'package:click_it_app/presentation/screens/home/ingredients_screen.dart';
 import 'package:click_it_app/presentation/screens/home/leftImage_screen.dart';
 import 'package:click_it_app/presentation/screens/home/new_uploadscreen.dart';
 import 'package:click_it_app/presentation/screens/home/nutritionVal_screen.dart';
-import 'package:click_it_app/presentation/screens/home/rightImage_screen.dart';
 import 'package:click_it_app/presentation/screens/home/show_image.dart';
 
 import 'package:flutter/material.dart';
@@ -40,15 +39,15 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class BackImageScreen extends StatefulWidget {
+class RightImageScreen extends StatefulWidget {
   final String gtin;
-  const BackImageScreen({Key? key, required this.gtin}) : super(key: key);
+  const RightImageScreen({Key? key, required this.gtin}) : super(key: key);
 
   @override
-  State<BackImageScreen> createState() => _BackImageScreenState();
+  State<RightImageScreen> createState() => _RightImageScreenState();
 }
 
-class _BackImageScreenState extends State<BackImageScreen> {
+class _RightImageScreenState extends State<RightImageScreen> {
   File? frontImage, backImage, leftImage, rightImage;
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   var deviceData = <String, dynamic>{};
@@ -149,7 +148,9 @@ class _BackImageScreenState extends State<BackImageScreen> {
             type: AlertType.error,
             title: "RESOLUTION ALERT",
             desc: "Please Upload High Quality Image.",
-            buttons: [],
+            buttons: [
+             
+            ],
           ).show();
 
           // **image Resolution Low show alert box
@@ -177,7 +178,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
 
       if (imagePicked != null) {
         imagePath = imagePicked.path;
-        backImageFile = await imagePicked.readAsBytes();
+        rightImageFile = await imagePicked.readAsBytes();
         setState(() {});
       }
 
@@ -191,7 +192,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
 
       // ** api call resoltion
     } on PlatformException catch (e) {
-      backImageFile = null;
+      rightImageFile = null;
       setState(() {});
       //exception could occur if the user has not permitted for the picker
 
@@ -239,8 +240,8 @@ class _BackImageScreenState extends State<BackImageScreen> {
         _onLoading();
 
         print('the current imagetype is $imageType');
-        if (imageType == 'backImage') {
-          backImage = croppedFile;
+        if (imageType == 'rightimage') {
+          rightImage = croppedFile;
           checkQuality();
         } else if (imageType == 'backImage') {
           backImage = croppedFile;
@@ -261,7 +262,6 @@ class _BackImageScreenState extends State<BackImageScreen> {
     super.initState();
 
     retakeBtnEnable = false;
-    submitBtnActive = false;
 
     getProductImages(widget.gtin);
 
@@ -374,7 +374,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
                     onPressed: () async {
                       //  save the images in Local database
 
-                      if (backImage != null) {
+                      if (rightImage != null) {
                         //user has uploaded atleast one image
 
                         print('user has not uploaded any new image');
@@ -499,7 +499,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            const Text('Back Image'),
+            const Text('Right Image'),
             const Spacer(),
             Text(
               widget.gtin,
@@ -524,7 +524,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             // **Original CArd
-            backImage != null
+            rightImage != null
                 ? Card(
                     margin: const EdgeInsets.all(10),
                     shape: RoundedRectangleBorder(
@@ -538,7 +538,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
                       decoration: BoxDecoration(
                         // TODO ADD  Image File Image
                         image: DecorationImage(
-                          image: FileImage(backImage!),
+                          image: FileImage(rightImage!),
                           fit: BoxFit.cover,
 
                           // fit: BoxFit.fill,
@@ -552,10 +552,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                           TextButton(
                             onPressed: () {
                               // **OPen Camer Gallery
-                              productBackImage != null
+                              productRightImage != null
                                   ? bottomsheetShow(
-                                      context, productBackImage!, 'backImage')
-                                  : bottomsheetUploads(context, 'backImage');
+                                      context, productRightImage!, 'rightImage')
+                                  : bottomsheetUploads(context, 'rightImage');
                             },
                             child: Text("Original",
                                 style: TextStyle(
@@ -571,10 +571,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                             child: TextButton(
                               onPressed: () {
                                 // productFrontImage != null
-                                productBackImage != null
-                                    ? bottomsheetShow(
-                                        context, productBackImage!, 'backImage')
-                                    : bottomsheetUploads(context, 'backImage');
+                                productRightImage != null
+                                    ? bottomsheetShow(context,
+                                        productRightImage!, 'rightImage')
+                                    : bottomsheetUploads(context, 'rightImage');
                               },
                               child: Text("Retake",
                                   style: TextStyle(
@@ -594,10 +594,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                 : GestureDetector(
                     onTap: () {
                       // TODO
-                      productBackImage != null
+                      productRightImage != null
                           ? bottomsheetShow(
-                              context, productBackImage!, 'backImage')
-                          : bottomsheetUploads(context, 'backImage');
+                              context, productRightImage!, 'rightImage')
+                          : bottomsheetUploads(context, 'rightImage');
                     },
                     child: Card(
                       margin: const EdgeInsets.all(10),
@@ -624,10 +624,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                             TextButton(
                               onPressed: () {
                                 // **OPen Camer Gallery
-                                productBackImage != null
-                                    ? bottomsheetShow(
-                                        context, productBackImage!, 'backImage')
-                                    : bottomsheetUploads(context, 'backImage');
+                                productRightImage != null
+                                    ? bottomsheetShow(context,
+                                        productRightImage!, 'rightImage')
+                                    : bottomsheetUploads(context, 'rightImage');
                               },
                               child: Text("Original",
                                   style: TextStyle(
@@ -640,10 +640,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                productBackImage != null
-                                    ? bottomsheetShow(
-                                        context, productBackImage!, 'backImage')
-                                    : bottomsheetUploads(context, 'backImage');
+                                productRightImage != null
+                                    ? bottomsheetShow(context,
+                                        productRightImage!, 'rightImage')
+                                    : bottomsheetUploads(context, 'rightImage');
                               },
                               child: Text("Retake",
                                   style: TextStyle(
@@ -677,7 +677,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
                         decoration: BoxDecoration(
                           // TODO ADD  Image File Image
                           image: DecorationImage(
-                            image: MemoryImage(backImageFile!),
+                            image: MemoryImage(frontImageFile!),
                             fit: BoxFit.cover,
 
                             // fit: BoxFit.fill,
@@ -712,10 +712,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                     )
                   : GestureDetector(
                       onTap: () {
-                        productBackImage != null
+                        productRightImage != null
                             ? bottomsheetShow(
-                                context, productBackImage!, 'backImage')
-                            : bottomsheetUploads(context, 'backImage');
+                                context, productRightImage!, 'rightImage')
+                            : bottomsheetUploads(context, 'rightImage');
                       },
                       child: Card(
                         margin: const EdgeInsets.all(10),
@@ -742,11 +742,11 @@ class _BackImageScreenState extends State<BackImageScreen> {
                               TextButton(
                                 onPressed: () {
                                   //  **Remove Background of original image and view here
-                                  productBackImage != null
+                                  productRightImage != null
                                       ? bottomsheetShow(context,
-                                          productBackImage!, 'backImage')
+                                          productRightImage!, 'rightImage')
                                       : bottomsheetUploads(
-                                          context, 'backImage');
+                                          context, 'rightImage');
                                 },
                                 child: Text("Edited",
                                     style: TextStyle(
@@ -785,7 +785,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
                   onTap: () {
                     setState(() {
                       globalcheck = "";
-                      backImage = null;
+                      frontImage = null;
                     });
                   },
                   child: Icon(

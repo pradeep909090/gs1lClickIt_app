@@ -17,7 +17,7 @@ class ApiClient {
 
       if (response.statusCode == 200) {
         // Loader show
-
+   
         http.Response imgres = await http.Response.fromStream(response);
         print(imgres.body);
         print(imgres);
@@ -27,7 +27,6 @@ class ApiClient {
         throw Exception("Error Sending Data${response.statusCode}");
       }
     } catch (e) {
-      
       throw e;
     }
   }

@@ -33,9 +33,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         //   home: UploadImagesScreen(gtin: "8904368501807"),
         // home: HomeScreen(),
-        home: const UploadImagesScreen(
-          gtin: '',
-        ),
+        home: const SplashScreen(),
         builder: EasyLoading.init(),
       ),
       // builder: () => MaterialApp(

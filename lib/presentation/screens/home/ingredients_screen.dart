@@ -14,7 +14,6 @@ import 'package:click_it_app/data/models/quality_model.dart';
 import 'package:click_it_app/data/models/upload_images_model.dart';
 import 'package:click_it_app/presentation/screens/home/backImage_screen.dart';
 import 'package:click_it_app/presentation/screens/home/home_screen.dart';
-import 'package:click_it_app/presentation/screens/home/ingredients_screen.dart';
 import 'package:click_it_app/presentation/screens/home/leftImage_screen.dart';
 import 'package:click_it_app/presentation/screens/home/new_uploadscreen.dart';
 import 'package:click_it_app/presentation/screens/home/nutritionVal_screen.dart';
@@ -40,16 +39,17 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class BackImageScreen extends StatefulWidget {
+class IngredientsImageScreen extends StatefulWidget {
   final String gtin;
-  const BackImageScreen({Key? key, required this.gtin}) : super(key: key);
+  const IngredientsImageScreen({Key? key, required this.gtin})
+      : super(key: key);
 
   @override
-  State<BackImageScreen> createState() => _BackImageScreenState();
+  State<IngredientsImageScreen> createState() => _IngredientsImageScreenState();
 }
 
-class _BackImageScreenState extends State<BackImageScreen> {
-  File? frontImage, backImage, leftImage, rightImage;
+class _IngredientsImageScreenState extends State<IngredientsImageScreen> {
+  File? frontImage, backImage, leftImage, rightImage, ingrdientsImage;
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   var deviceData = <String, dynamic>{};
 //static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -64,6 +64,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
 
   String? productFrontImage,
       productBackImage,
+      productIngredientsImage,
       productLeftImage,
       productRightImage;
 
@@ -77,7 +78,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
   bool showProgressBar = false;
   bool submitBtnActive = false;
 
-  Uint8List? frontImageFile, backImageFile, rightImageFile;
+  Uint8List? frontImageFile,
+      backImageFile,
+      rightImageFile,
+      ingredientsImageFile;
 
   String? imagePath;
 
@@ -95,6 +99,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
     });
   }
 
+  // / ** Quality Check APi Fucntion
   // / ** Quality Check APi Fucntion
   Future<void> checkQuality() async {
     try {
@@ -149,7 +154,9 @@ class _BackImageScreenState extends State<BackImageScreen> {
             type: AlertType.error,
             title: "RESOLUTION ALERT",
             desc: "Please Upload High Quality Image.",
-            buttons: [],
+            buttons: [
+             
+            ],
           ).show();
 
           // **image Resolution Low show alert box
@@ -177,7 +184,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
 
       if (imagePicked != null) {
         imagePath = imagePicked.path;
-        backImageFile = await imagePicked.readAsBytes();
+        ingredientsImageFile = await imagePicked.readAsBytes();
         setState(() {});
       }
 
@@ -191,7 +198,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
 
       // ** api call resoltion
     } on PlatformException catch (e) {
-      backImageFile = null;
+      frontImageFile = null;
       setState(() {});
       //exception could occur if the user has not permitted for the picker
 
@@ -239,8 +246,8 @@ class _BackImageScreenState extends State<BackImageScreen> {
         _onLoading();
 
         print('the current imagetype is $imageType');
-        if (imageType == 'backImage') {
-          backImage = croppedFile;
+        if (imageType == 'ingredientsImage') {
+          ingrdientsImage = croppedFile;
           checkQuality();
         } else if (imageType == 'backImage') {
           backImage = croppedFile;
@@ -261,7 +268,6 @@ class _BackImageScreenState extends State<BackImageScreen> {
     super.initState();
 
     retakeBtnEnable = false;
-    submitBtnActive = false;
 
     getProductImages(widget.gtin);
 
@@ -374,7 +380,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
                     onPressed: () async {
                       //  save the images in Local database
 
-                      if (backImage != null) {
+                      if (ingrdientsImage != null) {
                         //user has uploaded atleast one image
 
                         print('user has not uploaded any new image');
@@ -476,7 +482,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
                 ],
               ),
             );
-
+            child:
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(15),
@@ -499,7 +505,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            const Text('Back Image'),
+            const Text('Ingredients Image'),
             const Spacer(),
             Text(
               widget.gtin,
@@ -524,7 +530,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             // **Original CArd
-            backImage != null
+            ingrdientsImage != null
                 ? Card(
                     margin: const EdgeInsets.all(10),
                     shape: RoundedRectangleBorder(
@@ -538,7 +544,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
                       decoration: BoxDecoration(
                         // TODO ADD  Image File Image
                         image: DecorationImage(
-                          image: FileImage(backImage!),
+                          image: FileImage(ingrdientsImage!),
                           fit: BoxFit.cover,
 
                           // fit: BoxFit.fill,
@@ -552,10 +558,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                           TextButton(
                             onPressed: () {
                               // **OPen Camer Gallery
-                              productBackImage != null
+                              productIngredientsImage != null
                                   ? bottomsheetShow(
-                                      context, productBackImage!, 'backImage')
-                                  : bottomsheetUploads(context, 'backImage');
+                                      context, productIngredientsImage!, 'ingredientsImage')
+                                  : bottomsheetUploads(context, 'ingredientsImage');
                             },
                             child: Text("Original",
                                 style: TextStyle(
@@ -571,10 +577,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                             child: TextButton(
                               onPressed: () {
                                 // productFrontImage != null
-                                productBackImage != null
-                                    ? bottomsheetShow(
-                                        context, productBackImage!, 'backImage')
-                                    : bottomsheetUploads(context, 'backImage');
+                               productIngredientsImage != null
+                                  ? bottomsheetShow(
+                                      context, productIngredientsImage!, 'ingredientsImage')
+                                  : bottomsheetUploads(context, 'ingredientsImage');
                               },
                               child: Text("Retake",
                                   style: TextStyle(
@@ -594,10 +600,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                 : GestureDetector(
                     onTap: () {
                       // TODO
-                      productBackImage != null
-                          ? bottomsheetShow(
-                              context, productBackImage!, 'backImage')
-                          : bottomsheetUploads(context, 'backImage');
+                      productIngredientsImage != null
+                                  ? bottomsheetShow(
+                                      context, productIngredientsImage!, 'ingredientsImage')
+                                  : bottomsheetUploads(context, 'ingredientsImage');
                     },
                     child: Card(
                       margin: const EdgeInsets.all(10),
@@ -624,10 +630,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                             TextButton(
                               onPressed: () {
                                 // **OPen Camer Gallery
-                                productBackImage != null
-                                    ? bottomsheetShow(
-                                        context, productBackImage!, 'backImage')
-                                    : bottomsheetUploads(context, 'backImage');
+                               productIngredientsImage != null
+                                  ? bottomsheetShow(
+                                      context, productIngredientsImage!, 'ingredientsImage')
+                                  : bottomsheetUploads(context, 'ingredientsImage');
                               },
                               child: Text("Original",
                                   style: TextStyle(
@@ -640,10 +646,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                productBackImage != null
-                                    ? bottomsheetShow(
-                                        context, productBackImage!, 'backImage')
-                                    : bottomsheetUploads(context, 'backImage');
+                                productIngredientsImage != null
+                                  ? bottomsheetShow(
+                                      context, productIngredientsImage!, 'ingredientsImage')
+                                  : bottomsheetUploads(context, 'ingredientsImage');
                               },
                               child: Text("Retake",
                                   style: TextStyle(
@@ -677,7 +683,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
                         decoration: BoxDecoration(
                           // TODO ADD  Image File Image
                           image: DecorationImage(
-                            image: MemoryImage(backImageFile!),
+                            image: MemoryImage(ingredientsImageFile!),
                             fit: BoxFit.cover,
 
                             // fit: BoxFit.fill,
@@ -712,10 +718,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                     )
                   : GestureDetector(
                       onTap: () {
-                        productBackImage != null
-                            ? bottomsheetShow(
-                                context, productBackImage!, 'backImage')
-                            : bottomsheetUploads(context, 'backImage');
+                         productIngredientsImage != null
+                                  ? bottomsheetShow(
+                                      context, productIngredientsImage!, 'ingredientsImage')
+                                  : bottomsheetUploads(context, 'ingredientsImage');
                       },
                       child: Card(
                         margin: const EdgeInsets.all(10),
@@ -742,11 +748,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
                               TextButton(
                                 onPressed: () {
                                   //  **Remove Background of original image and view here
-                                  productBackImage != null
-                                      ? bottomsheetShow(context,
-                                          productBackImage!, 'backImage')
-                                      : bottomsheetUploads(
-                                          context, 'backImage');
+                                   productIngredientsImage != null
+                                  ? bottomsheetShow(
+                                      context, productIngredientsImage!, 'ingredientsImage')
+                                  : bottomsheetUploads(context, 'ingredientsImage');
                                 },
                                 child: Text("Edited",
                                     style: TextStyle(
@@ -785,7 +790,7 @@ class _BackImageScreenState extends State<BackImageScreen> {
                   onTap: () {
                     setState(() {
                       globalcheck = "";
-                      backImage = null;
+                      frontImage = null;
                     });
                   },
                   child: Icon(
