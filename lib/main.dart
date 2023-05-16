@@ -1,6 +1,7 @@
 import 'package:click_it_app/presentation/screens/Splash/splash_screen.dart';
 import 'package:click_it_app/presentation/screens/home/home_screen.dart';
 import 'package:click_it_app/presentation/screens/home/new_uploadscreen.dart';
+import 'package:click_it_app/presentation/screens/home/scrollableImageView.dart';
 import 'package:click_it_app/presentation/screens/home/upload.dart';
 
 import 'package:click_it_app/presentation/screens/home/upload_images_screen.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         //   home: UploadImagesScreen(gtin: "8904368501807"),
         // home: HomeScreen(),
-        home: const SplashScreen(),
+        home: const ImageUploadGrid(),
         builder: EasyLoading.init(),
       ),
       // builder: () => MaterialApp(

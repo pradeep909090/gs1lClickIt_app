@@ -20,6 +20,7 @@ import 'package:click_it_app/presentation/screens/home/new_uploadscreen.dart';
 import 'package:click_it_app/presentation/screens/home/nutritionVal_screen.dart';
 import 'package:click_it_app/presentation/screens/home/rightImage_screen.dart';
 import 'package:click_it_app/presentation/screens/home/show_image.dart';
+import 'package:click_it_app/presentation/screens/home/upload_images_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -259,9 +260,10 @@ class _BackImageScreenState extends State<BackImageScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    retakeBtnEnable = false;
-    submitBtnActive = false;
+    setState(() {
+      retakeBtnEnable = false;
+      submitBtnActive = false;
+    });
 
     getProductImages(widget.gtin);
 

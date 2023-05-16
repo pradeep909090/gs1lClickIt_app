@@ -13,6 +13,7 @@ class UploadImagesRequestModel {
     required this.imgFront,
     required this.imgLeft,
     required this.imgRight,
+    
   });
   late final String uid;
   late final String gtin;
